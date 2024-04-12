@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Input from '../../components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema, Schema } from '../../components/utils/rules'
@@ -7,7 +7,9 @@ import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from '../../components/apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from '../../components/utils/utils'
-import { ResponseApi } from '../../components/types/utils.type'
+import { ErrorResponse } from '../../components/types/utils.type'
+import { useContext } from 'react'
+import { AppContext } from '../../components/contexts/app.context'
 
 // interface FormData {
 //   email: string
@@ -18,6 +20,9 @@ import { ResponseApi } from '../../components/types/utils.type'
 type FormData = Schema
 
 export default function Register() {
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -35,10 +40,11 @@ export default function Register() {
     const body = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
-        console.log(data)
+        setIsAuthenticated(true)
+        navigate('/')
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError?.email) {
             setError('email', {
@@ -92,7 +98,7 @@ export default function Register() {
               />
               <div className='mt-3'>
                 <button
-                  className='w-full bg-rose-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-rose-600'
+                  className='w-full bg-rose-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-rose-600 rounded-md'
                   type='submit'
                 >
                   Đăng ký

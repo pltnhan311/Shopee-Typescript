@@ -8,3 +8,7 @@ export const registerAccount = async (body: { email: string; password: string })
 export const loginAccount = async (body: { email: string; password: string }) => {
   return await Http.post<AuthResponse>('/login', body)
 }
+
+export const logoutAccount = async () => {
+  return await Http.post('/logout')
+}
