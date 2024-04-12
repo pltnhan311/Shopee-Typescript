@@ -2,10 +2,12 @@ import type { RegisterOptions, UseFormRegister } from 'react-hook-form'
 
 interface Props {
   type: React.HTMLInputTypeAttribute
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errorMessage: string | undefined
   placeholder?: string
   className?: string
   name: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>
   rules?: RegisterOptions
   autoComplete?: string

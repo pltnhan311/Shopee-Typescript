@@ -6,6 +6,8 @@ import { schema, Schema } from '../../components/utils/rules'
 import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from '../../components/apis/auth.api'
 import { omit } from 'lodash'
+import { isAxiosUnprocessableEntityError } from '../../components/utils/utils'
+import { ResponseApi } from '../../components/types/utils.type'
 
 // interface FormData {
 //   email: string
@@ -19,6 +21,7 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(schema)
@@ -35,7 +38,21 @@ export default function Register() {
         console.log(data)
       },
       onError: (error) => {
-        console.log(error)
+        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+          const formError = error.response?.data.data
+          if (formError?.email) {
+            setError('email', {
+              message: formError.email,
+              type: 'Server'
+            })
+          }
+          if (formError?.password) {
+            setError('password', {
+              message: formError.password,
+              type: 'Server'
+            })
+          }
+        }
       }
     })
   })
@@ -52,7 +69,7 @@ export default function Register() {
                 name='email'
                 register={register}
                 className='mt-8'
-                errorMessage={errors?.email?.message}
+                errorMessage={errors.email?.message}
                 placeholder='Email'
               />
               <Input
@@ -60,7 +77,7 @@ export default function Register() {
                 name='password'
                 register={register}
                 className='mt-3'
-                errorMessage={errors?.password?.message}
+                errorMessage={errors.password?.message}
                 placeholder='Password'
                 autoComplete='on'
               />
@@ -69,7 +86,7 @@ export default function Register() {
                 name='confirm_password'
                 register={register}
                 className='mt-3'
-                errorMessage={errors?.confirm_password?.message}
+                errorMessage={errors.confirm_password?.message}
                 placeholder='Confirm Password'
                 autoComplete='on'
               />

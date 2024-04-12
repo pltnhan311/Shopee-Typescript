@@ -4,3 +4,7 @@ import Http from '../utils/http'
 export const registerAccount = async (body: { email: string; password: string }) => {
   return await Http.post<AuthResponse>('/register', body)
 }
+
+export const loginAccount = async (body: { email: string; password: string }) => {
+  return await Http.post<AuthResponse>('/login', body)
+}
