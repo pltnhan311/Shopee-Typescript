@@ -9,11 +9,13 @@ import { ErrorResponse } from '../../components/types/utils.type'
 import Input from '../../components/Input'
 import { useContext } from 'react'
 import { AppContext } from '../../components/contexts/app.context'
+import Button from '../../components/Button'
+import path from '../../components/constants/path'
 
 type FormData = Omit<Schema, 'confirm_password'>
 const loginSchema = schema.omit(['confirm_password'])
 export default function Login() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
 
   const {
@@ -33,6 +35,7 @@ export default function Login() {
     loginAccountMutation.mutate(data, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
+        setProfile(data.data.data.user)
         navigate('/')
       },
       onError: (error) => {
@@ -80,16 +83,18 @@ export default function Login() {
                 autoComplete='on'
               />
               <div className='mt-3'>
-                <button
-                  className='w-full bg-rose-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-rose-600 rounded-md'
+                <Button
+                  isLoading={loginAccountMutation.isPending}
+                  disabled={loginAccountMutation.isPending}
+                  className='w-full bg-rose-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-rose-600 rounded-md flex justify-center items-center'
                   type='submit'
                 >
                   Đăng nhập
-                </button>
+                </Button>
               </div>
               <div className='mt-8 flex items-center justify-center'>
                 <span className='text-gray-400'>Bạn chưa có tài khoản?</span>
-                <Link className='ml-1 text-rose-400' to='/register'>
+                <Link className='ml-1 text-rose-400' to={path.register}>
                   Đăng ký
                 </Link>
               </div>

@@ -10,6 +10,8 @@ import { isAxiosUnprocessableEntityError } from '../../components/utils/utils'
 import { ErrorResponse } from '../../components/types/utils.type'
 import { useContext } from 'react'
 import { AppContext } from '../../components/contexts/app.context'
+import Button from '../../components/Button'
+import path from '../../components/constants/path'
 
 // interface FormData {
 //   email: string
@@ -20,7 +22,7 @@ import { AppContext } from '../../components/contexts/app.context'
 type FormData = Schema
 
 export default function Register() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
 
   const {
@@ -41,6 +43,7 @@ export default function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
+        setProfile(data.data.data.user)
         navigate('/')
       },
       onError: (error) => {
@@ -96,17 +99,17 @@ export default function Register() {
                 placeholder='Confirm Password'
                 autoComplete='on'
               />
-              <div className='mt-3'>
-                <button
-                  className='w-full bg-rose-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-rose-600 rounded-md'
-                  type='submit'
-                >
-                  Đăng ký
-                </button>
-              </div>
+              <Button
+                isLoading={registerAccountMutation.isPending}
+                disabled={registerAccountMutation.isPending}
+                className='w-full bg-rose-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-rose-600 rounded-md flex justify-center items-center'
+                type='submit'
+              >
+                Đăng ký
+              </Button>
               <div className='mt-8 flex items-center justify-center'>
                 <span className='text-gray-400'>Bạn đã có tài khoản?</span>
-                <Link className='ml-1 text-rose-400' to='/login'>
+                <Link className='ml-1 text-rose-400' to={path.login}>
                   Đăng nhập
                 </Link>
               </div>

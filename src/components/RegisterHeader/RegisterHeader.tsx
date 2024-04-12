@@ -1,7 +1,8 @@
 import { Link, useMatch } from 'react-router-dom'
+import path from '../constants/path'
 
 export default function RegisterHeader() {
-  const isLogin = useMatch('/login')
+  const isLogin = useMatch(path.login)
 
   return (
     <header className='py-5'>
