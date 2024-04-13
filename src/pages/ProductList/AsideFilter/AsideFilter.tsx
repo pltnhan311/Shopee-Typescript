@@ -1,31 +1,59 @@
-import { Link } from 'react-router-dom'
+import { Link, createSearchParams } from 'react-router-dom'
 import path from '../../../components/constants/path'
 import Input from '../../../components/Input'
 import Button from '../../../components/Button'
 import { FiFilter, FiMenu } from 'react-icons/fi'
+import { QueryConfig } from '../ProductList'
+import { Category } from '../../../components/types/category.type'
+import classNames from 'classnames'
 
-export default function AsideFilter() {
+interface Props {
+  queryConfig: QueryConfig
+  categories: Category[]
+}
+
+export default function AsideFilter({ queryConfig, categories }: Props) {
+  const { category } = queryConfig // lay category tren Url
+
   return (
     <div className='py-4'>
-      <Link to={path.home} className='flex items-center font-bold'>
+      <Link
+        to={path.home}
+        className={classNames('flex items-center font-bold', {
+          'text-rose-600': !category
+        })}
+      >
         <FiMenu style={{ marginRight: '12px' }} size='1rem' />
         Tất cả danh mục
       </Link>
       <div className='my-4 h-[1px] bg-gray-300' />
       <ul>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-2 font-semibold text-orange'>
-            <svg viewBox='0 0 4 7' className='absolute left-[-10px] top-1 h-2 w-2 fill-orange'>
-              <polygon points='4 3.5 0 0 0 7' />
-            </svg>
-            Thời trang nam
-          </Link>
-        </li>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-2 '>
-            Điện thoại
-          </Link>
-        </li>
+        {categories.map((categoryItem) => {
+          const isActive = category === categoryItem._id
+          return (
+            <li className='py-2 pl-2' key={categoryItem._id}>
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    category: categoryItem._id
+                  }).toString()
+                }}
+                className={classNames('relative px-2', {
+                  'font-semibold text-rose-600': isActive
+                })}
+              >
+                {isActive && (
+                  <svg viewBox='0 0 4 7' className='absolute left-[-10px] top-1 h-2 w-2 fill-darkpink'>
+                    <polygon points='4 3.5 0 0 0 7' />
+                  </svg>
+                )}
+                {categoryItem.name}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
       <Link to={path.home} className='mt-4 flex items-center font-bold uppercase'>
         <FiFilter style={{ marginRight: '12px' }} size='1rem' />
