@@ -3,13 +3,16 @@ import { getProductDetail } from '../../components/apis/product.api'
 import { useParams } from 'react-router-dom'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import ProductRating from '../../components/ProductRating'
-import { formatCurrency, formatNumberToSocialStyle, rateSale } from '../../components/utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../components/utils/utils'
 import InputNumber from '../../components/InputNumber'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Product } from '../../components/types/product.type'
 
 export default function ProductDetail() {
-  const { id } = useParams<{ id: string }>()
+  // const { id } = useParams<{ id: string }>()
+  const { nameId } = useParams()
+  const id = getIdFromNameId(nameId as string)
+
   const { data: productDetailData } = useQuery({
     queryKey: ['products', id],
     queryFn: () => getProductDetail(id as string)
