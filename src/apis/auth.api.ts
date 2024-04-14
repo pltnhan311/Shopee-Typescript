@@ -1,4 +1,4 @@
-import path from '../../constants/path'
+import path from '../constants/path'
 import { AuthResponse } from '../types/auth.type'
 import Http from '../utils/http'
 

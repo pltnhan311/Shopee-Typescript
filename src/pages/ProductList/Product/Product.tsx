@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Product as ProductType } from '../../../components/types/product.type'
-import { formatCurrency, formatNumberToSocialStyle, generateNameId } from '../../../components/utils/utils'
+import { Product as ProductType } from '../../../types/product.type'
+import { formatCurrency, formatNumberToSocialStyle, generateNameId } from '../../../utils/utils'
 import ProductRating from '../../../components/ProductRating'
 import path from '../../../constants/path'
 

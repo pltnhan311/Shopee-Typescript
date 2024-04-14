@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, createContext, useState } from 'react'
-import { getAccessTokenFromLS, getProfileFromLS } from '../components/utils/auth'
-import { User } from '../components/types/user.type'
+import { getAccessTokenFromLS, getProfileFromLS } from '../utils/auth'
+import { User } from '../types/user.type'
 
 interface AppContextInterface {
   isAuthenticated: boolean

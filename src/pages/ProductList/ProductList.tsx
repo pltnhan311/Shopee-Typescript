@@ -2,10 +2,10 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import AsideFilter from './AsideFilter'
 import Product from './Product/Product'
 import SortProductList from './SortProductList'
-import { getProducts } from '../../components/apis/product.api'
+import { getProducts } from '../../apis/product.api'
 import Pagination from '../../components/Pagination'
-import { ProductListConfig } from '../../components/types/product.type'
-import { getCategories } from '../../components/apis/category.api'
+import { ProductListConfig } from '../../types/product.type'
+import { getCategories } from '../../apis/category.api'
 import useQueryConfig from '../../hooks/useQueryConfig'
 
 export default function ProductList() {
