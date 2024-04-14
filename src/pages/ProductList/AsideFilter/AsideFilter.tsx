@@ -2,7 +2,6 @@ import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import path from '../../../constants/path'
 import Button from '../../../components/Button'
 import { FiFilter, FiMenu } from 'react-icons/fi'
-import { QueryConfig } from '../ProductList'
 import { Category } from '../../../components/types/category.type'
 import classNames from 'classnames'
 import InputNumber from '../../../components/InputNumber'
@@ -12,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Controller, useForm } from 'react-hook-form'
 import { omit } from 'lodash'
 import RatingStars from '../../../components/RatingStar/RatingStar'
+import { QueryConfig } from '../../../hooks/useQueryConfig'
 
 interface Props {
   queryConfig: QueryConfig
@@ -33,7 +33,6 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   const {
     control,
     handleSubmit,
-    // watch,
     trigger,
     formState: { errors }
   } = useForm<FormData>({

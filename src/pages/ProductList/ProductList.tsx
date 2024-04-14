@@ -14,7 +14,8 @@ export default function ProductList() {
   const { data: productData } = useQuery({
     queryKey: ['products', queryConfig], // giong useEffect dependencies
     queryFn: () => getProducts(queryConfig as ProductListConfig),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    staleTime: 3 * 60 * 1000 // 3 minutes: fetch data again
   })
 
   const { data: categoryData } = useQuery({
