@@ -9,9 +9,9 @@ import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from '../../components/utils/utils'
 import { ErrorResponse } from '../../components/types/utils.type'
 import { useContext } from 'react'
-import { AppContext } from '../../components/contexts/app.context'
+import { AppContext } from '../../contexts/app.context'
 import Button from '../../components/Button'
-import path from '../../components/constants/path'
+import path from '../../constants/path'
 
 // interface FormData {
 //   email: string

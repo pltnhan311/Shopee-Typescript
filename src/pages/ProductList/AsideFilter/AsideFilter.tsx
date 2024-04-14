@@ -1,5 +1,5 @@
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
-import path from '../../../components/constants/path'
+import path from '../../../constants/path'
 import Button from '../../../components/Button'
 import { FiFilter, FiMenu } from 'react-icons/fi'
 import { QueryConfig } from '../ProductList'

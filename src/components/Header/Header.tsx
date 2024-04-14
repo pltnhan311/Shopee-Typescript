@@ -6,8 +6,8 @@ import Popover from '../Popover'
 import { useMutation } from '@tanstack/react-query'
 import { logoutAccount } from '../apis/auth.api'
 import { useContext } from 'react'
-import { AppContext } from '../contexts/app.context'
-import path from '../constants/path'
+import { AppContext } from '../../contexts/app.context'
+import path from '../../constants/path'
 
 export default function Header() {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)

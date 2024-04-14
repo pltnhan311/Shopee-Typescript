@@ -1,9 +1,9 @@
 import axios, { AxiosInstance } from 'axios'
 import toast from 'react-hot-toast'
-import HttpStatusCode from '../constants/httpStatusCode.enum'
+import HttpStatusCode from '../../constants/httpStatusCode.enum'
 import { AuthResponse } from '../types/auth.type'
 import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setProfileFromLS } from './auth'
-import path from '../constants/path'
+import path from '../../constants/path'
 
 let accessToken = getAccessTokenFromLS()
 

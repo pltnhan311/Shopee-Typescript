@@ -8,9 +8,9 @@ import { isAxiosUnprocessableEntityError } from '../../components/utils/utils'
 import { ErrorResponse } from '../../components/types/utils.type'
 import Input from '../../components/Input'
 import { useContext } from 'react'
-import { AppContext } from '../../components/contexts/app.context'
+import { AppContext } from '../../contexts/app.context'
 import Button from '../../components/Button'
-import path from '../../components/constants/path'
+import path from '../../constants/path'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
