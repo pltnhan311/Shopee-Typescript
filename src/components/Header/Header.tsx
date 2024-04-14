@@ -1,16 +1,37 @@
 import { AiOutlineGlobal, AiOutlineShoppingCart } from 'react-icons/ai'
 import { FaChevronDown } from 'react-icons/fa6'
 import { IoSearch } from 'react-icons/io5'
-import { Link } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import Popover from '../Popover'
 import { useMutation } from '@tanstack/react-query'
 import { logoutAccount } from '../apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 import path from '../../constants/path'
+import useQueryConfig from '../../hooks/useQueryConfig'
+import { useForm } from 'react-hook-form'
+import { Schema, schema } from '../utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { omit } from 'lodash'
+
+type FormData = Pick<Schema, 'name'>
+
+const nameSchema = schema.pick(['name'])
 
 export default function Header() {
+  const navigate = useNavigate()
+
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)
+
+  const queryConfig = useQueryConfig()
+  console.log(queryConfig)
+
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
 
   const logOutMutation = useMutation({
     mutationFn: logoutAccount,
@@ -23,6 +44,26 @@ export default function Header() {
   const handleLogout = () => {
     logOutMutation.mutate()
   }
+
+  const onSubmitSearch = handleSubmit((data) => {
+    // if order is set, keep, otherwise return latest
+    const config = queryConfig.order
+      ? omit(
+          {
+            ...queryConfig,
+            name: data.name
+          },
+          ['order', 'sort_by']
+        )
+      : {
+          ...queryConfig,
+          name: data.name
+        }
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(config).toString()
+    })
+  })
 
   return (
     <div className='pb-5 pt-2 bg-gradient-to-r from-blue-400 to-rose-400 text-teal-50'>
@@ -100,13 +141,13 @@ export default function Header() {
               </g>
             </svg>
           </Link>
-          <form className='col-span-9'>
+          <form className='col-span-9' onSubmit={onSubmitSearch}>
             <div className='flex rounded-sm bg-white p-1'>
               <input
                 type='text'
-                name='search'
                 className='flex-grow border-none bg-transparent px-3 py-2 text-black outline-none'
                 placeholder='Free Ship Đơn Từ 0Đ'
+                {...register('name')}
               />
               <button className='flex-shrink-0 rounded-sm bg-rose-400 px-6 py-2 hover:opacity-90'>
                 <IoSearch size='1.5rem' color='white' />
