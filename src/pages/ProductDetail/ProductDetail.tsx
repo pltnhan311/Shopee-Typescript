@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getProductDetail, getProducts } from '../../apis/product.api'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import ProductRating from '../../components/ProductRating'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../utils/utils'
@@ -12,8 +12,10 @@ import { addToCart } from '../../apis/purchase.api'
 import toast from 'react-hot-toast'
 import { queryClient } from '../../main'
 import { purchasesStatus } from '../../constants/purchase'
+import path from '../../constants/path'
 
 export default function ProductDetail() {
+  const navigate = useNavigate()
   const [buyCount, setBuyCount] = useState(1)
 
   // const { id } = useParams<{ id: string }>()
@@ -124,6 +126,19 @@ export default function ProductDetail() {
         }
       }
     )
+  }
+
+  const onBuyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({
+      product_id: product?._id as string,
+      buy_count: buyCount
+    })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
   }
 
   if (!product) return null
@@ -248,7 +263,10 @@ export default function ProductDetail() {
                     </svg>
                     Thêm vào giỏ hàng
                   </button>
-                  <button className='fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-rose-500 px-5 capitalize text-white shadow-sm outline-none hover:bg-rose-500/90'>
+                  <button
+                    className='fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-rose-500 px-5 capitalize text-white shadow-sm outline-none hover:bg-rose-500/90'
+                    onClick={onBuyNow}
+                  >
                     Mua ngay
                   </button>
                 </div>

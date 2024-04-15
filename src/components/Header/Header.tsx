@@ -107,7 +107,7 @@ export default function Header() {
             >
               <Link to='/' className='relative'>
                 <AiOutlineShoppingCart size='2rem' color='white' />
-                {purchasesInCart && (
+                {purchasesInCart && purchasesInCart.length > 0 && (
                   <span className='absolute left-[17px] top-[-5px] rounded-full bg-white px-[9px] py-[1px] text-xs text-darkpink '>
                     {purchasesInCart?.length}
                   </span>
