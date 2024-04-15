@@ -16,6 +16,7 @@ import { omit } from 'lodash'
 import { purchasesStatus } from '../../constants/purchase'
 import { getPurchases } from '../../apis/purchase.api'
 import { formatCurrency } from '../../utils/utils'
+import { queryClient } from '../../main'
 
 type FormData = Pick<Schema, 'name'>
 
@@ -41,12 +42,14 @@ export default function Header() {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      queryClient.removeQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
     }
   })
 
   const { data: purchasesInCartData } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
-    queryFn: () => getPurchases({ status: purchasesStatus.inCart })
+    queryFn: () => getPurchases({ status: purchasesStatus.inCart }),
+    enabled: isAuthenticated
   })
 
   const purchasesInCart = purchasesInCartData?.data.data
@@ -195,19 +198,22 @@ export default function Header() {
                           {purchasesInCart.length > MAX_PURCHASES ? purchasesInCart.length - MAX_PURCHASES : ''} Thêm
                           hàng vào giỏ
                         </div>
-                        <button className='rounded-sm bg-rose-500 px-4 py-2 capitalize text-white hover:bg-opacity-90'>
+                        <Link
+                          to={path.cart}
+                          className='rounded-sm bg-rose-500 px-4 py-2 capitalize text-white hover:bg-opacity-90'
+                        >
                           Xem giỏ hàng
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   ) : (
-                    <div className='flex h-[300px] w-[300px] items-center justify-center p-2'>
+                    <div className='flex flex-col h-[300px] w-[300px] items-center justify-center p-2'>
                       <img
-                        src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/'
+                        src='https://cdni.iconscout.com/illustration/premium/thumb/no-product-8316266-6632286.png'
                         alt='no purchase'
                         className='h-24 w-24'
                       />
-                      <div className='mt-3 capitalize'>Chưa có sản phẩm</div>
+                      <div className='mt-3 capitalize font-medium'>Chưa có sản phẩm</div>
                     </div>
                   )}
                 </div>
@@ -215,9 +221,11 @@ export default function Header() {
             >
               <Link to='/' className='relative'>
                 <AiOutlineShoppingCart size='2rem' color='white' />
-                <span className='absolute left-[17px] top-[-5px] rounded-full bg-white px-[9px] py-[1px] text-xs text-darkpink '>
-                  {purchasesInCart?.length}
-                </span>
+                {purchasesInCart && (
+                  <span className='absolute left-[17px] top-[-5px] rounded-full bg-white px-[9px] py-[1px] text-xs text-darkpink '>
+                    {purchasesInCart?.length}
+                  </span>
+                )}
               </Link>
             </Popover>
           </div>

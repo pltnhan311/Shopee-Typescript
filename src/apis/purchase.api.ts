@@ -13,3 +13,17 @@ export const getPurchases = async (params: { status: PurchaseListStatus }) => {
     params
   })
 }
+
+export const buyProducts = async (body: { product_id: string; buy_count: number }[]) => {
+  await Http.post<SuccessResponse<Purchase[]>>(`${URL}/buy-products`, body)
+}
+
+export const updatePurchase = async (body: { product_id: string; buy_count: number }) => {
+  await Http.put<SuccessResponse<Purchase>>(`${URL}/update-purchase`, body)
+}
+
+export const deletePurchase = async (purchaseIds: string[]) => {
+  await Http.delete<SuccessResponse<{ deleted_count: number }>>(`${URL}`, {
+    data: purchaseIds
+  })
+}
